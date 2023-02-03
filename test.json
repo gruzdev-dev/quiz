@@ -1,0 +1,37 @@
+[
+  {
+    "id": 1,
+    "title": "test checkbox",
+    "type": "checkbox",
+    "answers": [
+      "test1",
+      "test2",
+      "test3"
+    ],
+    "valid": [
+      "test1",
+      "test3"
+    ]
+  },
+  {
+    "id": 2,
+    "title": "test text",
+    "type": "text",
+    "valid": [
+      "correct answer"
+    ]
+  },
+  {
+    "id": 3,
+    "title": "test radio",
+    "type": "radio",
+    "answers": [
+      "test5",
+      "test6",
+      "test7"
+    ],
+    "valid": [
+      "test1"
+    ]
+  }
+]
