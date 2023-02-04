@@ -1,4 +1,4 @@
-import { FieldProps } from '@/pages'
+import { FieldProps } from '@/components/Form'
 
 function FieldSeRadio({ question, onChange }: FieldProps) {
 
@@ -9,7 +9,7 @@ function FieldSeRadio({ question, onChange }: FieldProps) {
   return (
     <fieldset className='mt-5'>
       <legend
-        className='contents text-base font-medium text-gray-900'>
+        className='contents text-base font-medium text-slate-700'>
         { question.title }
       </legend>
       { question?.answers && question.answers.map(answer =>
@@ -27,7 +27,7 @@ function FieldSeRadio({ question, onChange }: FieldProps) {
             className='h-4 w-4 border-gray-300 accent-teal-700'
           />
           <label htmlFor={ `radio_${ question.id }` }
-                 className='ml-3 block text-sm font-medium text-gray-700'>
+                 className='ml-3 block text-sm font-medium text-slate-600'>
             { answer }
           </label>
         </div>

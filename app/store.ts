@@ -1,10 +1,19 @@
 import { configureStore } from '@reduxjs/toolkit'
-import questionsSlice from './questionsSlice'
+import questionsSlice from './features/questionsSlice'
+import studentSlice from '@/app/features/studentSlice'
+import { localStorageMiddleware } from '@/app/middlewares/localStorage'
+
+export const isClient = (): boolean => {
+  return !(typeof window === 'undefined')
+}
 
 export const store = configureStore({
   reducer: {
-    [questionsSlice.name]: questionsSlice.reducer
+    [questionsSlice.name]: questionsSlice.reducer,
+    [studentSlice.name]: studentSlice.reducer
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(localStorageMiddleware)
 })
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

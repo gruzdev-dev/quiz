@@ -1,4 +1,4 @@
-import { FieldProps } from '@/pages'
+import { FieldProps } from '@/components/Form'
 
 function FieldSetText({ question, onChange }: FieldProps) {
 
@@ -9,7 +9,7 @@ function FieldSetText({ question, onChange }: FieldProps) {
   return (
     <fieldset className='mt-5'>
       <label htmlFor={ `question_${ question.id }` }
-             className='contents text-base font-medium text-gray-900'>
+             className='contents text-base font-medium text-slate-700'>
         { question.title }
       </label>
       <input
