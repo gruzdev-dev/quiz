@@ -1,6 +1,6 @@
 import { RequestData } from '@/pages/api/request'
 
-export async function fetchRequest(data: RequestData): Promise<any> {
+export async function fetchRequest(data: RequestData): Promise<boolean> {
   const response = await fetch('/api/request', {
     method: 'POST',
     headers: {
@@ -10,7 +10,8 @@ export async function fetchRequest(data: RequestData): Promise<any> {
   })
   if (response.ok) {
     console.log(await response.json())
+    return true
   } else {
-    console.warn(await response.json())
+    return false
   }
 }

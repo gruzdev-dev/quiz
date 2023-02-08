@@ -3,10 +3,11 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 import type { RootState } from '../store'
 
 export type Student = {
-  email: string
+  email: string,
+  status: 'processing' | 'passed' | 'error'
 }
 
-const initialState: Student = { email: '' }
+const initialState: Student = { email: '', status: 'processing' }
 export const studentSlice = createSlice({
   name: 'student',
   initialState,
@@ -14,6 +15,15 @@ export const studentSlice = createSlice({
     setEmail(
       state, { payload }: PayloadAction<string>) {
       state.email = payload
+    },
+    setStatusToPassed(state) {
+      state.status = 'passed'
+    },
+    setStatusToProcessing(state) {
+      state.status = 'processing'
+    },
+    setStatusToError(state) {
+      state.status = 'error'
     }
   }
 })
@@ -21,5 +31,6 @@ export const studentSlice = createSlice({
 export const studentActions = studentSlice.actions
 
 export const selectStudentEmail = (state: RootState) => state.student.email
+export const selectStudentStatus = (state: RootState) => state.student.status
 
 export default studentSlice

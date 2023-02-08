@@ -11,7 +11,6 @@ import { useAppDispatch, useAppSelector } from '@/app/hooks'
 import { selectStudentEmail, studentActions } from '@/app/features/studentSlice'
 import { ErrorType, validateRequestData } from '@/app/validators/formValidator'
 import { RequestAnswer, RequestData } from '@/pages/api/request'
-import { fetchRequest } from '@/app/fetch/request'
 
 export type FieldProps = {
   question: Question,
@@ -29,12 +28,15 @@ export type Error = {
   errorType?: ErrorType
 }
 
-function Form() {
+type propsType = {
+  startRequest: (data: RequestData) => void
+}
+
+function Form({ startRequest }: propsType) {
   const dispatch = useAppDispatch()
   const questions: Question[] = useAppSelector(selectQuestions)
   const email: string = useAppSelector(selectStudentEmail)
   const [error, setError] = useState<Error>({ hasError: false })
-  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const getNewAnswer = (params: GetAnswerParams): string[] => {
     if (params.type === 'checkbox') {
@@ -68,16 +70,11 @@ function Form() {
 
   const submitHandler = async (e: MouseEvent<HTMLButtonElement>): Promise<void> => {
     e.preventDefault()
-    if (isLoading) {
-      return
-    }
     const data = createRequestData()
     const error: ErrorType | null = validateRequestData(data)
     if (error == null) {
       setError({ hasError: false })
-      setIsLoading(true)
-      await fetchRequest(data)
-      setIsLoading(false)
+      await startRequest(data)
     } else {
       setError({ hasError: true, errorType: error })
     }
@@ -139,13 +136,15 @@ function Form() {
       }
       {
         error.hasError && <span
-          className='mt-5 text-base block text-red-500'>{ error.errorType === 'NO_VALID_EMAIL' ? 'Введите корректный email' : 'Заполните все поля' }</span>
+          className='mt-4 text-base block text-red-500'>{ error.errorType ===
+        'NO_VALID_EMAIL'
+          ? 'Введите корректный email'
+          : 'Заполните все поля' }</span>
       }
       <button
-        disabled={ isLoading }
         type='submit'
         onClick={ submitHandler }
-        className='mt-3 rounded-md block w-full px-2 py-3 text-white bg-emerald-800'>Отправить
+        className='mt-4 rounded-md block w-full px-2 py-3 text-white bg-emerald-800'>Отправить
       </button>
     </form>
   )
