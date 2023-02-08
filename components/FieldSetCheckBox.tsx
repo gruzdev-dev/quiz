@@ -12,7 +12,7 @@ function FieldSetCheckBox({ question, onChange }: FieldProps) {
         className='contents text-base font-medium text-slate-700'>
         { question.title }
       </legend>
-      { question?.answers && question.answers.map(answer =>
+      { question?.answers && question.answers.map((answer, i) =>
         <div
           key={ `${ question.id }_${ answer }` }
           className='flex items-center mt-2'>
@@ -20,13 +20,13 @@ function FieldSetCheckBox({ question, onChange }: FieldProps) {
             data-question-id={ question.id }
             value={ answer }
             checked={ getChecked(answer) }
-            id={ `${ question.id }_${ answer }` }
-            name={ `checkbox_${ question.id }_${ answer }` }
+            id={ `${ question.id }_${ i }` }
+            name={ `${ question.id }_${ i }` }
             type='checkbox'
             onChange={ onChange }
-            className='h-4 w-4 border-gray-300 accent-teal-700'
+            className='h-4 w-4 border-gray-300 accent-teal-700 shrink-0'
           />
-          <label htmlFor={ `checkbox_${ question.id }_${ answer }` }
+          <label htmlFor={ `${ question.id }_${ i }` }
                  className='ml-3 block text-sm font-medium text-slate-600'>
             { answer }
           </label>

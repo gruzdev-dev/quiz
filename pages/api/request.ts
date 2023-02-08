@@ -1,8 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { Question } from '@/app/features/questionsSlice'
 import { getQuestionsFromJson } from '@/pages/api/questions'
-import { isEmailValidate } from '@/app/validators/isEmailValidate'
+import { isEmailValid } from '@/app/validators/isEmailValid'
 import { isAnswersValid } from '@/app/validators/isAnswersValid'
+import { getScoresByAnswer } from '@/app/validators/scoreAnswerValidator'
 
 export type RequestAnswer = {
   question_id: number,
@@ -14,8 +15,8 @@ export type RequestData = {
   user_answers: RequestAnswer[]
 }
 
-type QuestionObj = {
-  [key: number]: Question
+export type QuestionObj = {
+  [n: number]: Question
 }
 export default async function handler(
   req: NextApiRequest,
@@ -30,8 +31,8 @@ export default async function handler(
 
     try {
       const questions: Question[] = await getQuestionsFromJson()
-      const questionsObj = questions.reduce(
-        (acc: QuestionObj, current) => acc[current.id] = current, {})
+      const questionsObj: QuestionObj = {}
+      questions.forEach(current => questionsObj[current.id] = current)
       const scores: number = data.user_answers.reduce(
         (scores, answer) => scores + getScoresByAnswer(answer, questionsObj), 0)
       return res.status(200).json({ scores })
@@ -45,26 +46,8 @@ export default async function handler(
 
 function isRequestDataValid(data: RequestData): boolean {
   if (!data?.user_email || !data.user_email.trim() ||
-    !isEmailValidate(data.user_email)) {
+    !isEmailValid(data.user_email)) {
     return false
   } else return isAnswersValid(data?.user_answers || [])
 }
-
-function getScoresByAnswer(
-  answer: RequestAnswer, questions: QuestionObj): number {
-  if (questions.hasOwnProperty(answer.question_id)) {
-    const question = questions[answer.question_id]
-    switch(question.type) {
-      case 'radio':
-        return 1
-      case 'checkbox':
-        return 1
-      case 'text':
-        return 1
-      default:
-        return 0
-    }
-  } else return 0
-}
-
 

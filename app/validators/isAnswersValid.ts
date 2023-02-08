@@ -12,7 +12,7 @@ export const isAnswersValid = (answers: RequestAnswer[]): boolean => {
     }
     if (answer?.answer && answer.answer.length > 0) {
       for(const str of answer.answer) {
-        if (!/[?!,.№a-zA-Zа-яА-ЯёЁ0-9\s]/gu.test(str)) {
+        if (!/[-?!(),_%.№a-zA-Zа-яА-ЯёЁ0-9\s]/gu.test(str)) {
           valid = false
           break
         }

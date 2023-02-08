@@ -17,7 +17,7 @@ export default async function handler(
         title: question.title,
         answers: question?.answers
       }
-    })
+    }).sort(() => Math.random() - 0.5)
   } catch(e) {
     //
   }

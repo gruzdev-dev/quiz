@@ -2,30 +2,33 @@ import Head from 'next/head'
 import { useAppDispatch } from '@/app/hooks'
 import Form from '@/components/Form'
 import { useEffect } from 'react'
-import { Question, questionActions } from '@/app/features/questionsSlice'
+import { questionActions } from '@/app/features/questionsSlice'
 import { RootState } from '@/app/store'
 import { studentActions } from '@/app/features/studentSlice'
+import { fetchQuestions } from '@/app/fetch/questions'
 
 function Home() {
   const dispatch = useAppDispatch()
 
-  const setQuestionsToStore = async (): Promise<string> => {
+  const setQuestionsToStore = async (): Promise<void> => {
     const jsonStore: string | null = localStorage.getItem('state')
     if (jsonStore === null) {
       const questions = await fetchQuestions()
       dispatch(questionActions.setQuestions(questions))
-      return 'questions have fetched'
     } else {
       const jsonStore: string = localStorage.getItem('state') || '{}'
       const store:RootState = JSON.parse(jsonStore)
       dispatch(questionActions.setQuestions(store.questions.data))
       dispatch(studentActions.setEmail(store.student.email))
-      return 'use cached questions'
+      if (store.questions.data.length === 0) {
+        const questions = await fetchQuestions()
+        dispatch(questionActions.setQuestions(questions))
+      }
     }
   }
 
   useEffect(() => {
-    setQuestionsToStore().then((str) => console.log(str))
+    setQuestionsToStore().then()
   }, [])
 
   return (
@@ -43,11 +46,3 @@ function Home() {
 }
 
 export default Home
-
-async function fetchQuestions(): Promise<Question[]> {
-  const response = await fetch('/api/questions')
-  if (response.ok) {
-    return await response.json()
-  }
-  return []
-}
